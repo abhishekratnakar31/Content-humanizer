@@ -1,0 +1,54 @@
+{
+  "auth": {
+    "providers": {
+      "emailPassword": true,
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "Content Humanizer",
+        "supportEmail": "contact@forzeo.com"
+      }
+    }
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "functions": {
+    "source": "functions",
+    "ignore": [
+      "node_modules",
+      ".git",
+      "firebase-debug.log",
+      "firestore-debug.log"
+    ]
+  },
+  "hosting": {
+    "public": "webapp_public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/api/v1/admin/**",
+        "function": "humanizerOps"
+      },
+      {
+        "source": "/api/v1/**",
+        "function": "apiGateway"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "emulators": {
+    "firestore": {
+      "port": 8085
+    },
+    "functions": {
+      "port": 5015
+    }
+  }
+}
