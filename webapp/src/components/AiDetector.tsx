@@ -232,7 +232,7 @@ export default function AiDetector() {
           }}>
             {/* Header Label */}
             <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#111827', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              <Scan size={16} style={{ color: '#00a2ff' }} /> AI Detector Sandbox
+              <Scan size={16} style={{ color: '#000000' }} /> AI Detector Sandbox
             </div>
 
             {/* Config & Actions */}
@@ -391,7 +391,7 @@ export default function AiDetector() {
                   onClick={handleHumanizeRedirect}
                   style={{
                     background: 'transparent',
-                    color: '#00a2ff',
+                    color: '#000000',
                     fontSize: '0.82rem',
                     padding: '0.45rem 1rem',
                     borderRadius: '9999px',
@@ -399,12 +399,12 @@ export default function AiDetector() {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.4rem',
-                    border: '1px solid rgba(0, 162, 255, 0.3)',
+                    border: '1px solid rgba(0, 0, 0, 0.25)',
                     cursor: 'pointer',
                     transition: 'all 0.2s ease'
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'rgba(0, 162, 255, 0.04)';
+                    e.currentTarget.style.background = 'rgba(0, 0, 0, 0.04)';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.background = 'transparent';
@@ -418,7 +418,7 @@ export default function AiDetector() {
               <button 
                 type="button"
                 style={{ 
-                  background: 'linear-gradient(135deg, #00a2ff 0%, #1d4ed8 100%)', 
+                  background: '#000000', 
                   color: '#ffffff',
                   fontSize: '0.82rem',
                   padding: '0.45rem 1.35rem',
@@ -428,7 +428,7 @@ export default function AiDetector() {
                   alignItems: 'center',
                   gap: '0.4rem',
                   border: 'none',
-                  boxShadow: '0 4px 12px rgba(0, 162, 255, 0.25)',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
                   cursor: (detecting || wordCount === 0) ? 'not-allowed' : 'pointer',
                   transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
                 }}
@@ -474,11 +474,11 @@ export default function AiDetector() {
                 width: '56px',
                 height: '56px',
                 borderRadius: '12px',
-                background: 'rgba(0, 162, 255, 0.08)',
+                background: 'rgba(0, 0, 0, 0.05)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#00a2ff',
+                color: '#000000',
                 marginBottom: '1rem'
               }}>
                 <Bot size={28} />
@@ -494,8 +494,8 @@ export default function AiDetector() {
                 onClick={handleDetect}
                 disabled={detecting || wordCount === 0}
                 style={{
-                  background: '#00a2ff',
-                  color: '#0a0b0d',
+                  background: '#000000',
+                  color: '#ffffff',
                   fontSize: '0.85rem',
                   padding: '0.6rem 1.35rem',
                   borderRadius: '8px',
@@ -504,7 +504,7 @@ export default function AiDetector() {
                   alignItems: 'center',
                   gap: '0.4rem',
                   border: 'none',
-                  boxShadow: '0 4px 12px rgba(0, 162, 255, 0.2)',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
                   cursor: (detecting || wordCount === 0) ? 'not-allowed' : 'pointer',
                   transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
                 }}
@@ -532,7 +532,7 @@ export default function AiDetector() {
                   <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', paddingBottom: '0.5rem' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', borderBottom: '1px solid #e5e7eb', paddingBottom: '0.75rem' }}>
                       <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#111827', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                        <Bot size={16} style={{ color: '#00a2ff' }} /> AI Scan Results
+                        <Bot size={16} style={{ color: '#000000' }} /> AI Scan Results
                       </span>
                       <button
                         onClick={handleDetect}
@@ -540,7 +540,7 @@ export default function AiDetector() {
                         style={{
                           background: 'transparent',
                           border: 'none',
-                          color: '#00a2ff',
+                          color: '#000000',
                           cursor: 'pointer',
                           fontSize: '0.75rem',
                           fontWeight: 600,
@@ -657,24 +657,33 @@ export default function AiDetector() {
                           key={idx} 
                           style={{ 
                             fontSize: '0.75rem', 
-                            background: '#ffffff', 
-                            padding: '0.6rem 0.8rem', 
-                            borderRadius: '6px', 
-                            border: '1px solid #e5e7eb',
-                            borderLeft: `2.5px solid ${verdictInfo.color}`,
-                            textAlign: 'left'
+                            background: 'rgba(239, 68, 68, 0.04)', 
+                            padding: '0.75rem 0.9rem', 
+                            borderRadius: '8px', 
+                            border: '1px solid rgba(239, 68, 68, 0.12)',
+                            textAlign: 'left',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '0.35rem'
                           }}
                         >
-                          <span style={{ fontStyle: 'italic', color: '#1f2937', display: 'block', marginBottom: '0.25rem' }}>
+                          <span style={{ fontStyle: 'italic', color: '#991b1b', display: 'block', fontWeight: 600 }}>
                             "{pat.quote}"
                           </span>
-                          <span style={{ color: '#4b5563', display: 'block', fontSize: '0.7rem' }}>
+                          <span style={{ color: '#7f1d1d', display: 'block', fontSize: '0.7rem', opacity: 0.85 }}>
                             {pat.explanation}
                           </span>
-                          {pat.alternative && (
-                            <div style={{ marginTop: '0.5rem', paddingTop: '0.4rem', borderTop: '1px dashed #e5e7eb', fontSize: '0.7rem' }}>
-                              <span style={{ fontWeight: 700, color: '#10b981' }}>Try: </span>
-                              <span style={{ color: '#059669', fontStyle: 'italic' }}>"{pat.alternative}"</span>
+                          {pat.alternative && !/^none needed$/i.test(pat.alternative.trim()) && (
+                            <div style={{ 
+                              marginTop: '0.35rem', 
+                              padding: '0.5rem 0.6rem', 
+                              background: 'rgba(16, 185, 129, 0.05)',
+                              border: '1px solid rgba(16, 185, 129, 0.15)',
+                              borderRadius: '6px',
+                              fontSize: '0.7rem' 
+                            }}>
+                              <span style={{ fontWeight: 700, color: '#065f46' }}>Try: </span>
+                              <span style={{ color: '#047857', fontStyle: 'italic' }}>"{pat.alternative}"</span>
                             </div>
                           )}
                         </div>

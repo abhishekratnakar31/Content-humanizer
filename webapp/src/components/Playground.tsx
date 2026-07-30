@@ -57,7 +57,7 @@ function ThoughtProcess({ text, active }: { text: string; active: boolean }) {
   return (
     <div style={{
       background: 'transparent',
-      borderLeft: '2px solid #00a2ff',
+      borderLeft: '2px solid #000000',
       borderRadius: '4px',
       padding: '0.25rem 0 0.25rem 0.75rem',
       marginTop: '0.4rem',
@@ -67,11 +67,11 @@ function ThoughtProcess({ text, active }: { text: string; active: boolean }) {
       maxHeight: '100px',
       overflowY: 'auto'
     }}>
-      <div style={{ color: '#00a2ff', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', marginBottom: '0.2rem', letterSpacing: '0.05em' }}>
+      <div style={{ color: '#000000', fontWeight: 600, fontSize: '0.72rem', textTransform: 'uppercase', marginBottom: '0.2rem', letterSpacing: '0.05em' }}>
         Thinking Process
       </div>
       {displayedText}
-      {active && <span className="cursor" style={{ display: 'inline-block', width: '6px', height: '12px', background: '#00a2ff', marginLeft: '2px', animation: 'blink 1s infinite' }}></span>}
+      {active && <span className="cursor" style={{ display: 'inline-block', width: '6px', height: '12px', background: '#000000', marginLeft: '2px', animation: 'blink 1s infinite' }}></span>}
       <style>{`
         @keyframes blink {
           50% { opacity: 0; }
@@ -169,7 +169,7 @@ function HighlightedText({ text, patterns, color }: { text: string; patterns: an
             padding: '8px 10px',
             position: 'absolute',
             zIndex: 10,
-            bottom: '125%',
+            top: '125%',
             left: '50%',
             marginLeft: '-130px',
             opacity: 0,
@@ -190,12 +190,12 @@ function HighlightedText({ text, patterns, color }: { text: string; patterns: an
           )}
           <span style={{
             position: 'absolute',
-            top: '100%',
+            bottom: '100%',
             left: '50%',
             marginLeft: '-5px',
             borderWidth: '5px',
             borderStyle: 'solid',
-            borderColor: '#1f2937 transparent transparent transparent'
+            borderColor: 'transparent transparent #1f2937 transparent'
           }}></span>
         </span>
       </span>
@@ -260,6 +260,8 @@ export default function Playground() {
   const [purchasingPkgId, setPurchasingPkgId] = useState<string | null>(null);
   const [detecting, setDetecting] = useState(false);
   const [showDetector, setShowDetector] = useState(false);
+  const [isOpenVoice, setIsOpenVoice] = useState(false);
+  const [isOpenMode, setIsOpenMode] = useState(false);
 
   // Setters using useAppStore.setState
   const inputText = playgroundInputText;
@@ -542,10 +544,9 @@ export default function Playground() {
             borderBottom: '1px solid #e5e7eb',
             background: 'transparent'
           }}>
-            {/* Left title */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#111827', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                <Sparkles size={16} style={{ color: '#00a2ff' }} /> Content Humanizer Sandbox
+                <Sparkles size={16} style={{ color: '#000000' }} /> Content Humanizer Sandbox
               </span>
             </div>
 
@@ -590,8 +591,13 @@ export default function Playground() {
               )}
 
               {/* Brand Voice Selector */}
-              <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                <select 
+              <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsOpenVoice(!isOpenVoice);
+                    setIsOpenMode(false);
+                  }}
                   style={{
                     background: '#ffffff',
                     color: '#374151',
@@ -600,23 +606,103 @@ export default function Playground() {
                     fontSize: '0.75rem',
                     padding: '0.25rem 0.5rem',
                     outline: 'none',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.25rem',
+                    userSelect: 'none',
+                    fontWeight: 600
                   }}
-                  value={selectedVoiceId} 
-                  onChange={(e) => setSelectedVoiceId(e.target.value)}
                 >
-                  <option value="">Default</option>
-                  {voiceProfiles.map((p) => (
-                    <option key={p.voiceProfileId} value={p.voiceProfileId}>
-                      {p.name}
-                    </option>
-                  ))}
-                </select>
+                  <span>
+                    {selectedVoiceId === '' 
+                      ? 'Default' 
+                      : voiceProfiles.find(p => p.voiceProfileId === selectedVoiceId)?.name || 'Default'}
+                  </span>
+                  <span style={{ fontSize: '0.55rem', color: '#64748b' }}>▼</span>
+                </button>
+                {isOpenVoice && (
+                  <>
+                    <div 
+                      onClick={() => setIsOpenVoice(false)}
+                      style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 999 }}
+                    />
+                    <div style={{
+                      position: 'absolute',
+                      top: '115%',
+                      left: 0,
+                      background: '#ffffff',
+                      border: '1px solid #cbd5e1',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+                      padding: '4px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '2px',
+                      minWidth: '160px',
+                      zIndex: 1000
+                    }}>
+                      <div
+                        onClick={() => { setSelectedVoiceId(''); setIsOpenVoice(false); }}
+                        style={{
+                          padding: '0.4rem 0.6rem',
+                          borderRadius: '4px',
+                          fontSize: '0.75rem',
+                          color: selectedVoiceId === '' ? '#ffffff' : '#374151',
+                          background: selectedVoiceId === '' ? '#000000' : 'transparent',
+                          cursor: 'pointer',
+                          textAlign: 'left',
+                          fontWeight: selectedVoiceId === '' ? 700 : 500
+                        }}
+                        onMouseEnter={(e) => {
+                          if (selectedVoiceId !== '') e.currentTarget.style.background = '#f3f4f6';
+                        }}
+                        onMouseLeave={(e) => {
+                          if (selectedVoiceId !== '') e.currentTarget.style.background = 'transparent';
+                        }}
+                      >
+                        Default
+                      </div>
+                      {voiceProfiles.map((p) => {
+                        const isSelected = selectedVoiceId === p.voiceProfileId;
+                        return (
+                          <div
+                            key={p.voiceProfileId}
+                            onClick={() => { setSelectedVoiceId(p.voiceProfileId); setIsOpenVoice(false); }}
+                            style={{
+                              padding: '0.4rem 0.6rem',
+                              borderRadius: '4px',
+                              fontSize: '0.75rem',
+                              color: isSelected ? '#ffffff' : '#374151',
+                              background: isSelected ? '#000000' : 'transparent',
+                              cursor: 'pointer',
+                              textAlign: 'left',
+                              fontWeight: isSelected ? 700 : 500
+                            }}
+                            onMouseEnter={(e) => {
+                              if (!isSelected) e.currentTarget.style.background = '#f3f4f6';
+                            }}
+                            onMouseLeave={(e) => {
+                              if (!isSelected) e.currentTarget.style.background = 'transparent';
+                            }}
+                          >
+                            {p.name}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Humanization Mode Selector */}
-              <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                <select 
+              <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsOpenMode(!isOpenMode);
+                    setIsOpenVoice(false);
+                  }}
                   style={{
                     background: '#ffffff',
                     color: '#374151',
@@ -625,33 +711,97 @@ export default function Playground() {
                     fontSize: '0.75rem',
                     padding: '0.25rem 0.5rem',
                     outline: 'none',
-                    cursor: 'pointer'
-                  }}
-                  value={activeMode} 
-                  onChange={(e) => {
-                    const val = e.target.value as 'normal' | 'medium' | 'best' | 'bypass';
-                    setActiveMode(val);
-                    if (val === 'normal') {
-                      setMode('standard');
-                      setReflectionLevel('basic');
-                    } else if (val === 'medium') {
-                      setMode('human');
-                      setReflectionLevel('advanced');
-                    } else if (val === 'best') {
-                      setMode('expert');
-                      setReflectionLevel('maximum');
-                    } else {
-                      // bypass: maximum everything
-                      setMode('bypass');
-                      setReflectionLevel('maximum');
-                    }
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.25rem',
+                    userSelect: 'none',
+                    fontWeight: 600
                   }}
                 >
-                  <option value="normal">Quick Clean</option>
-                  <option value="medium">Deep Rewrite</option>
-                  <option value="best">Authority</option>
-                  <option value="bypass">⚡ Stealth</option>
-                </select>
+                  <span>
+                    {{
+                      normal: 'Quick Clean',
+                      medium: 'Deep Rewrite',
+                      best: 'Authority',
+                      bypass: '⚡ Stealth'
+                    }[activeMode] || 'Deep Rewrite'}
+                  </span>
+                  <span style={{ fontSize: '0.55rem', color: '#64748b' }}>▼</span>
+                </button>
+                {isOpenMode && (
+                  <>
+                    <div 
+                      onClick={() => setIsOpenMode(false)}
+                      style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 999 }}
+                    />
+                    <div style={{
+                      position: 'absolute',
+                      top: '115%',
+                      left: 0,
+                      background: '#ffffff',
+                      border: '1px solid #cbd5e1',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+                      padding: '4px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '2px',
+                      minWidth: '130px',
+                      zIndex: 1000
+                    }}>
+                      {[
+                        { value: 'normal', label: 'Quick Clean' },
+                        { value: 'medium', label: 'Deep Rewrite' },
+                        { value: 'best', label: 'Authority' },
+                        { value: 'bypass', label: '⚡ Stealth' }
+                      ].map((item) => {
+                        const isSelected = activeMode === item.value;
+                        return (
+                          <div
+                            key={item.value}
+                            onClick={() => {
+                              const val = item.value as 'normal' | 'medium' | 'best' | 'bypass';
+                              setActiveMode(val);
+                              if (val === 'normal') {
+                                setMode('standard');
+                                setReflectionLevel('basic');
+                              } else if (val === 'medium') {
+                                setMode('human');
+                                setReflectionLevel('advanced');
+                              } else if (val === 'best') {
+                                setMode('expert');
+                                setReflectionLevel('maximum');
+                              } else {
+                                setMode('bypass');
+                                setReflectionLevel('maximum');
+                              }
+                              setIsOpenMode(false);
+                            }}
+                            style={{
+                              padding: '0.4rem 0.6rem',
+                              borderRadius: '4px',
+                              fontSize: '0.75rem',
+                              color: isSelected ? '#ffffff' : '#374151',
+                              background: isSelected ? '#000000' : 'transparent',
+                              cursor: 'pointer',
+                              textAlign: 'left',
+                              fontWeight: isSelected ? 700 : 500
+                            }}
+                            onMouseEnter={(e) => {
+                              if (!isSelected) e.currentTarget.style.background = '#f3f4f6';
+                            }}
+                            onMouseLeave={(e) => {
+                              if (!isSelected) e.currentTarget.style.background = 'transparent';
+                            }}
+                          >
+                            {item.label}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* New Playground button */}
@@ -688,9 +838,9 @@ export default function Playground() {
               <button
                 onClick={() => setShowDetector(!showDetector)}
                 style={{
-                  background: showDetector ? 'rgba(0, 162, 255, 0.08)' : 'transparent',
-                  border: showDetector ? '1px solid rgba(0, 162, 255, 0.3)' : '1px solid #d1d5db',
-                  color: showDetector ? '#00a2ff' : '#4b5563',
+                  background: showDetector ? 'rgba(0, 0, 0, 0.05)' : 'transparent',
+                  border: showDetector ? '1px solid rgba(0, 0, 0, 0.25)' : '1px solid #d1d5db',
+                  color: showDetector ? '#000000' : '#4b5563',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
@@ -1024,7 +1174,7 @@ export default function Playground() {
                             <div key={index} style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', opacity: isLast ? 1 : 0.45, transition: 'opacity 0.4s ease' }}>
                               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.82rem', fontWeight: 600 }}>
                                 {isLast ? (
-                                  <span className="spinner" style={{ width: '12px', height: '12px', borderWidth: '1.5px', borderLeftColor: '#00a2ff', margin: 0 }}></span>
+                                  <span className="spinner" style={{ width: '12px', height: '12px', borderWidth: '1.5px', borderLeftColor: '#000000', margin: 0 }}></span>
                                 ) : (
                                   <span style={{ color: '#10b981', fontWeight: 800 }}>✓</span>
                                 )}
@@ -1085,12 +1235,12 @@ export default function Playground() {
                             </div>
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.75rem' }}>
                               {[
-                                { label: 'Source AI %', value: currentMetrics.input_ai_written_percent, color: '#ef4444' },
-                                { label: 'Bypass Resistance', value: currentMetrics.ai_detection_resistance, color: '#10b981' },
-                                { label: 'Human Likeness', value: currentMetrics.human_likeness, color: '#00a2ff' },
-                                { label: 'Readability Score', value: currentMetrics.readability, color: '#8b5cf6' },
-                                { label: 'SEO Retention', value: currentMetrics.seo_retention, color: '#0ea5e9' },
-                                { label: 'Overall Match', value: currentMetrics.overall, color: '#ec4899' }
+                                { label: 'Source AI %', value: currentMetrics.input_ai_written_percent, color: '#000000' },
+                                { label: 'Bypass Resistance', value: currentMetrics.ai_detection_resistance, color: '#000000' },
+                                { label: 'Human Likeness', value: currentMetrics.human_likeness, color: '#000000' },
+                                { label: 'Readability Score', value: currentMetrics.readability, color: '#000000' },
+                                { label: 'SEO Retention', value: currentMetrics.seo_retention, color: '#000000' },
+                                { label: 'Overall Match', value: currentMetrics.overall, color: '#000000' }
                               ].map((metric) => (
                                 <div key={metric.label} style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
                                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: 600 }}>
@@ -1162,7 +1312,7 @@ export default function Playground() {
                   whiteSpace: 'nowrap'
                 }}>
                   <span style={{ color: '#6b7280' }}>Total:</span>
-                  <span style={{ color: '#00a2ff' }}>{user.credits.toLocaleString()}</span>
+                  <span style={{ color: '#000000', fontWeight: 700 }}>{user.credits.toLocaleString()}</span>
                   <span style={{ color: '#6b7280' }}>credits</span>
                 </div>
               )}
@@ -1172,7 +1322,7 @@ export default function Playground() {
                 type="button"
                 className="btn-primary" 
                 style={{ 
-                  background: 'linear-gradient(135deg, #00a2ff 0%, #1d4ed8 100%)', 
+                  background: '#000000', 
                   color: '#ffffff',
                   fontSize: '0.82rem',
                   padding: '0.45rem 1.35rem',
@@ -1182,7 +1332,7 @@ export default function Playground() {
                   alignItems: 'center',
                   gap: '0.4rem',
                   border: 'none',
-                  boxShadow: '0 4px 12px rgba(0, 162, 255, 0.25)',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
                   cursor: (processingJob || wordCount === 0) ? 'not-allowed' : 'pointer',
                   transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
                 }}
@@ -1191,12 +1341,14 @@ export default function Playground() {
                 onMouseEnter={(e) => {
                   if (!processingJob && wordCount > 0) {
                     e.currentTarget.style.transform = 'translateY(-1px)';
-                    e.currentTarget.style.boxShadow = '0 6px 16px rgba(0, 162, 255, 0.35)';
+                    e.currentTarget.style.boxShadow = '0 6px 16px rgba(0, 0, 0, 0.25)';
+                    e.currentTarget.style.background = '#222222';
                   }
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'none';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 162, 255, 0.25)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+                  e.currentTarget.style.background = '#000000';
                 }}
               >
                 <Sparkles size={14} /> Humanize
@@ -1287,11 +1439,11 @@ export default function Playground() {
                 width: '56px',
                 height: '56px',
                 borderRadius: '12px',
-                background: 'rgba(0, 162, 255, 0.08)',
+                background: 'rgba(0, 0, 0, 0.05)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#00a2ff',
+                color: '#000000',
                 marginBottom: '1rem'
               }}>
                 <Bot size={28} />
@@ -1307,8 +1459,8 @@ export default function Playground() {
                 onClick={handleDetect}
                 disabled={detecting || wordCount === 0 || processingJob}
                 style={{
-                  background: '#00a2ff',
-                  color: '#0a0b0d',
+                  background: '#000000',
+                  color: '#ffffff',
                   fontSize: '0.85rem',
                   padding: '0.6rem 1.35rem',
                   borderRadius: '8px',
@@ -1317,24 +1469,26 @@ export default function Playground() {
                   alignItems: 'center',
                   gap: '0.4rem',
                   border: 'none',
-                  boxShadow: '0 4px 12px rgba(0, 162, 255, 0.2)',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
                   cursor: (detecting || wordCount === 0 || processingJob) ? 'not-allowed' : 'pointer',
                   transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
                 }}
                 onMouseEnter={(e) => {
                   if (!detecting && wordCount > 0 && !processingJob) {
                     e.currentTarget.style.transform = 'translateY(-1px)';
-                    e.currentTarget.style.boxShadow = '0 6px 16px rgba(0, 162, 255, 0.3)';
+                    e.currentTarget.style.boxShadow = '0 6px 16px rgba(0, 0, 0, 0.25)';
+                    e.currentTarget.style.background = '#222222';
                   }
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'none';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 162, 255, 0.2)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+                  e.currentTarget.style.background = '#000000';
                 }}
               >
                 {detecting ? (
                   <>
-                    <div className="spinner" style={{ width: '12px', height: '12px', borderWidth: '1.5px', borderLeftColor: '#0a0b0d', margin: 0 }}></div>
+                    <div className="spinner" style={{ width: '12px', height: '12px', borderWidth: '1.5px', borderLeftColor: '#ffffff', margin: 0 }}></div>
                     Scanning...
                   </>
                 ) : (
@@ -1355,7 +1509,7 @@ export default function Playground() {
                   <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', paddingBottom: '0.5rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', borderBottom: '1px solid #e5e7eb', paddingBottom: '0.75rem' }}>
                     <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#111827', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                      <Bot size={16} style={{ color: '#00a2ff' }} /> AI Scan Results
+                      <Bot size={16} style={{ color: '#000000' }} /> AI Scan Results
                     </span>
                     <button
                       onClick={handleDetect}
@@ -1363,7 +1517,7 @@ export default function Playground() {
                       style={{
                         background: 'transparent',
                         border: 'none',
-                        color: '#00a2ff',
+                        color: '#000000',
                         cursor: 'pointer',
                         fontSize: '0.75rem',
                         fontWeight: 600,
@@ -1570,24 +1724,33 @@ export default function Playground() {
                           key={idx} 
                           style={{ 
                             fontSize: '0.75rem', 
-                            background: '#ffffff', 
-                            padding: '0.6rem 0.8rem', 
-                            borderRadius: '6px', 
-                            border: '1px solid #e5e7eb',
-                            borderLeft: `2.5px solid ${verdictInfo.color}`,
-                            textAlign: 'left'
+                            background: 'rgba(239, 68, 68, 0.04)', 
+                            padding: '0.75rem 0.9rem', 
+                            borderRadius: '8px', 
+                            border: '1px solid rgba(239, 68, 68, 0.12)',
+                            textAlign: 'left',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '0.35rem'
                           }}
                         >
-                          <span style={{ fontStyle: 'italic', color: '#1f2937', display: 'block', marginBottom: '0.25rem' }}>
+                          <span style={{ fontStyle: 'italic', color: '#991b1b', display: 'block', fontWeight: 600 }}>
                             "{pat.quote}"
                           </span>
-                          <span style={{ color: '#4b5563', display: 'block', fontSize: '0.7rem' }}>
+                          <span style={{ color: '#7f1d1d', display: 'block', fontSize: '0.7rem', opacity: 0.85 }}>
                             {pat.explanation}
                           </span>
                           {pat.alternative && !/^none needed$/i.test(pat.alternative.trim()) && (
-                            <div style={{ marginTop: '0.5rem', paddingTop: '0.4rem', borderTop: '1px dashed #e5e7eb', fontSize: '0.7rem' }}>
-                              <span style={{ fontWeight: 700, color: '#10b981' }}>Try: </span>
-                              <span style={{ color: '#059669', fontStyle: 'italic' }}>"{pat.alternative}"</span>
+                            <div style={{ 
+                              marginTop: '0.35rem', 
+                              padding: '0.5rem 0.6rem', 
+                              background: 'rgba(16, 185, 129, 0.05)',
+                              border: '1px solid rgba(16, 185, 129, 0.15)',
+                              borderRadius: '6px',
+                              fontSize: '0.7rem' 
+                            }}>
+                              <span style={{ fontWeight: 700, color: '#065f46' }}>Try: </span>
+                              <span style={{ color: '#047857', fontStyle: 'italic' }}>"{pat.alternative}"</span>
                             </div>
                           )}
                         </div>
@@ -1622,10 +1785,10 @@ export default function Playground() {
         >
           {/* Modal Container */}
           <div style={{
-            background: 'var(--bg-primary, #ffffff)',
-            border: '1px solid var(--card-border, #e2e8f0)',
+            background: '#090d16',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
             borderRadius: '24px',
-            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
             width: '100%',
             maxWidth: '850px',
             padding: '2rem',
@@ -1644,7 +1807,7 @@ export default function Playground() {
                 right: '1rem',
                 background: 'none',
                 border: 'none',
-                color: 'var(--text-muted, #94a3b8)',
+                color: '#94a3b8',
                 cursor: 'pointer',
                 padding: '0.5rem',
                 borderRadius: '50%',
@@ -1652,8 +1815,8 @@ export default function Playground() {
                 alignItems: 'center',
                 justifyContent: 'center'
               }}
-              onMouseOver={(e) => e.currentTarget.style.color = 'var(--text-primary)'}
-              onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-muted)'}
+              onMouseOver={(e) => e.currentTarget.style.color = '#ffffff'}
+              onMouseOut={(e) => e.currentTarget.style.color = '#94a3b8'}
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
@@ -1662,9 +1825,9 @@ export default function Playground() {
               <div style={{ display: 'inline-flex', padding: '0.75rem', borderRadius: '50%', background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', marginBottom: '0.75rem' }}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
               </div>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--text-primary)' }}>Insufficient Credits</h3>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.25rem', lineHeight: '1.5' }}>
-                Your current balance is <strong style={{ color: 'var(--color-primary)' }}>{(user?.credits || 0).toLocaleString()} credits</strong>, but this humanization job requires <strong style={{ color: 'var(--color-secondary)' }}>{estimatedCredits.toLocaleString()} credits</strong>. Top up to continue.
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#ffffff' }}>Insufficient Credits</h3>
+              <p style={{ color: '#cbd5e1', fontSize: '0.875rem', marginTop: '0.25rem', lineHeight: '1.5' }}>
+                Your current balance is <strong style={{ color: '#ffffff' }}>{(user?.credits || 0).toLocaleString()} credits</strong>, but this humanization job requires <strong style={{ color: '#ffffff' }}>{estimatedCredits.toLocaleString()} credits</strong>. Top up to continue.
               </p>
             </div>
 
@@ -1677,10 +1840,9 @@ export default function Playground() {
                   credits: 1000, 
                   price: '9', 
                   desc: 'Perfect for freelance copywriters.',
-                  color: '#10b981', // Emerald
-                  btnBg: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                  color: '#ffffff',
                   badge: 'Starter',
-                  borderColor: 'rgba(16, 185, 129, 0.3)',
+                  popular: false,
                   features: ['1,000 standard credits', 'Access to all pipeline Agents', 'Up to 3 Brand Voice profiles', '90%+ AI Resistance Guarantee']
                 },
                 { 
@@ -1690,10 +1852,8 @@ export default function Playground() {
                   price: '29', 
                   desc: 'Ideal for content agencies and sites.', 
                   popular: true,
-                  color: '#a855f7', // Purple
-                  btnBg: 'linear-gradient(135deg, #3b82f6 0%, #a855f7 50%, #ec4899 100%)',
+                  color: '#ffffff',
                   badge: 'Best Value',
-                  borderColor: 'rgba(168, 85, 247, 0.5)',
                   features: ['5,000 standard credits', 'Access to all pipeline Agents', 'Up to 6 Brand Voice profiles', 'Priority processing queue']
                 },
                 { 
@@ -1702,10 +1862,9 @@ export default function Playground() {
                   credits: 20000, 
                   price: '79', 
                   desc: 'Best for bulk publishing syndicates.',
-                  color: '#f59e0b', // Amber/Gold
-                  btnBg: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                  color: '#ffffff',
                   badge: 'Power User',
-                  borderColor: 'rgba(245, 158, 11, 0.3)',
+                  popular: false,
                   features: ['20,000 standard credits', 'Access to all pipeline Agents', 'Up to 10 Brand Voice profiles', 'Dedicated support line']
                 }
               ].map((pkg) => (
@@ -1716,33 +1875,52 @@ export default function Playground() {
                     display: 'flex', 
                     flexDirection: 'column', 
                     justifyContent: 'space-between',
-                    padding: '1.25rem',
-                    border: `1px solid ${pkg.borderColor}`,
-                    boxShadow: pkg.popular ? 'var(--shadow-glow-purple)' : 'none',
+                    padding: '1.5rem 1.25rem',
+                    background: 'linear-gradient(135deg, rgba(20, 20, 20, 0.85) 0%, rgba(5, 5, 5, 0.95) 100%)',
+                    backdropFilter: 'blur(16px)',
+                    WebkitBackdropFilter: 'blur(16px)',
+                    border: pkg.popular ? '2px solid #ffffff' : '1px solid rgba(255, 255, 255, 0.15)',
+                    borderRadius: '16px',
+                    boxShadow: pkg.popular 
+                      ? '0 10px 25px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.12)' 
+                      : 'inset 0 1px 0 rgba(255, 255, 255, 0.12)',
                     position: 'relative',
-                    transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+                    transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+                    textAlign: 'left'
                   }}
                 >
-                  <span className="tag" style={{ position: 'absolute', top: '10px', right: '10px', fontSize: '0.65rem', padding: '0.15rem 0.4rem', background: `${pkg.color}15`, color: pkg.color, borderColor: `${pkg.color}30`, fontWeight: 700 }}>
-                    {pkg.badge}
-                  </span>
+                  {pkg.badge && (
+                    <span className="tag" style={{ 
+                      position: 'absolute', 
+                      top: '12px', 
+                      right: '12px', 
+                      fontSize: '0.65rem', 
+                      padding: '0.2rem 0.5rem', 
+                      background: '#ffffff', 
+                      color: '#000000', 
+                      borderRadius: '9999px',
+                      fontWeight: 700 
+                    }}>
+                      {pkg.badge}
+                    </span>
+                  )}
                   
                   <div>
-                    <h4 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-primary)' }}>{pkg.name}</h4>
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', marginTop: '0.25rem' }}>{pkg.desc}</p>
+                    <h4 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#ffffff', margin: 0 }}>{pkg.name}</h4>
+                    <p style={{ color: '#94a3b8', fontSize: '0.75rem', marginTop: '0.25rem', margin: '0.25rem 0 0 0' }}>{pkg.desc}</p>
                     
                     <div style={{ margin: '1rem 0' }}>
-                      <span style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-primary)' }}>US${pkg.price}</span>
-                      <span style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}> USD</span>
+                      <span style={{ fontSize: '1.75rem', fontWeight: 800, color: '#ffffff' }}>US${pkg.price}</span>
+                      <span style={{ color: '#94a3b8', fontSize: '0.75rem' }}> USD</span>
                     </div>
 
-                    <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.45rem', borderTop: '1px solid var(--card-border)', paddingTop: '0.75rem' }}>
+                    <div style={{ fontSize: '0.8rem', color: '#cbd5e1', marginBottom: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.45rem', borderTop: '1px solid rgba(255, 255, 255, 0.12)', paddingTop: '0.75rem' }}>
                       {pkg.features.map((feat, fidx) => (
                         <div key={fidx} style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={pkg.color} strokeWidth="3">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3">
                             <polyline points="20 6 9 17 4 12"></polyline>
                           </svg>
-                          <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{feat}</span>
+                          <span style={{ fontSize: '0.75rem', color: '#cbd5e1' }}>{feat}</span>
                         </div>
                       ))}
                     </div>
@@ -1752,14 +1930,24 @@ export default function Playground() {
                     className="btn-primary" 
                     style={{ 
                       width: '100%', 
-                      background: pkg.btnBg, 
+                      background: '#ffffff', 
                       border: 'none',
-                      color: '#ffffff',
-                      padding: '0.5rem',
+                      color: '#000000',
+                      padding: '0.6rem',
                       fontSize: '0.8rem',
-                      borderRadius: '8px',
+                      borderRadius: '10px',
                       cursor: 'pointer',
-                      fontWeight: 600
+                      fontWeight: 700,
+                      boxShadow: '0 4px 12px rgba(255, 255, 255, 0.1)',
+                      transition: 'all 0.2s'
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.9)';
+                      e.currentTarget.style.boxShadow = '0 6px 16px rgba(255, 255, 255, 0.2)';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.background = '#ffffff';
+                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(255, 255, 255, 0.1)';
                     }}
                     disabled={purchasingPkgId !== null}
                     onClick={() => handlePurchase(pkg.id, pkg.credits)}

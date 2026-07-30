@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useAppStore } from '../store/useAppStore';
-import { User, Mail, Award, Key, Check, ChevronRight, LogOut, CreditCard, Cpu } from 'lucide-react';
+import { User, Mail, Award, Key, ChevronRight, LogOut, CreditCard, Cpu, History as HistoryIcon } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import History from './History';
+import CreditTransactions from './CreditTransactions';
 
 interface UserSettingsProps {
   onClose?: () => void;
@@ -14,7 +16,7 @@ export default function UserSettings({ onClose }: UserSettingsProps) {
   const [purchasingPlan, setPurchasingPlan] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState<'profile' | 'api' | 'llmKeys' | 'billing'>((location.state as any)?.activeTab || 'profile');
+  const [activeTab, setActiveTab] = useState<'profile' | 'api' | 'llmKeys' | 'billing' | 'history' | 'transactions'>((location.state as any)?.activeTab || 'profile');
 
   const [geminiKey, setGeminiKey] = useState(user?.geminiApiKey ? '••••••••••••••••' : '');
   const [openaiKey, setOpenaiKey] = useState(user?.openaiApiKey ? '••••••••••••••••' : '');
@@ -162,7 +164,9 @@ export default function UserSettings({ onClose }: UserSettingsProps) {
               { id: 'profile', label: 'Profile Settings', icon: User },
               { id: 'api', label: 'Developer API Keys', icon: Key },
               { id: 'llmKeys', label: 'Custom LLM Keys', icon: Cpu },
-              { id: 'billing', label: 'Billing & Subscription', icon: CreditCard }
+              { id: 'billing', label: 'Billing & Subscription', icon: CreditCard },
+              { id: 'history', label: 'Humanization History', icon: HistoryIcon },
+              { id: 'transactions', label: 'Transaction Ledger', icon: CreditCard }
             ].map((t) => {
               const Icon = t.icon;
               const isActive = activeTab === t.id;
@@ -178,8 +182,8 @@ export default function UserSettings({ onClose }: UserSettingsProps) {
                     padding: '0.75rem 1rem',
                     border: 'none',
                     borderRadius: '8px',
-                    background: isActive ? 'rgba(0, 162, 255, 0.08)' : 'transparent',
-                    color: isActive ? '#00a2ff' : '#6b7280',
+                    background: isActive ? '#000000' : 'transparent',
+                    color: isActive ? '#ffffff' : '#6b7280',
                     fontWeight: 600,
                     fontSize: '0.85rem',
                     cursor: 'pointer',
@@ -238,7 +242,7 @@ export default function UserSettings({ onClose }: UserSettingsProps) {
             <div style={{ animation: 'fadeIn 0.2s ease-out', maxWidth: '550px' }}>
               <div className="glass-card" style={{ background: '#ffffff', border: '1px solid #e5e7eb', boxShadow: 'none' }}>
                 <h3 style={{ fontSize: '1.1rem', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)' }}>
-                  <User size={18} style={{ color: '#00a2ff' }} /> Profile Information
+                  <User size={18} style={{ color: '#000000' }} /> Profile Information
                 </h3>
 
                 <form onSubmit={handleUpdateName} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -267,7 +271,7 @@ export default function UserSettings({ onClose }: UserSettingsProps) {
                   <button 
                     type="submit" 
                     className="btn-primary" 
-                    style={{ width: '100%', padding: '0.6rem', fontSize: '0.85rem', borderRadius: '8px', background: 'linear-gradient(135deg, #00a2ff 0%, #1d4ed8 100%)' }}
+                    style={{ width: '100%', padding: '0.6rem', fontSize: '0.85rem', borderRadius: '8px', background: '#000000' }}
                     disabled={updatingName || !name.trim() || name === user?.name}
                   >
                     {updatingName ? 'Saving Changes...' : 'Update Name'}
@@ -282,9 +286,9 @@ export default function UserSettings({ onClose }: UserSettingsProps) {
               <div className="glass-card" style={{ background: '#ffffff', border: '1px solid #e5e7eb', boxShadow: 'none' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
                   <h3 style={{ fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)' }}>
-                    <Key size={18} style={{ color: 'var(--color-secondary)' }} /> Developer Credentials
+                    <Key size={18} style={{ color: '#000000' }} /> Developer Credentials
                   </h3>
-                  <span className="tag tag-info" style={{ fontSize: '0.65rem', padding: '0.15rem 0.4rem', fontWeight: 700 }}>
+                  <span style={{ fontSize: '0.65rem', padding: '0.15rem 0.4rem', fontWeight: 700, borderRadius: '4px', background: 'rgba(0, 0, 0, 0.05)', color: '#000000', border: '1px solid rgba(0, 0, 0, 0.12)' }}>
                     {apiKeys.length} Active Key{apiKeys.length !== 1 ? 's' : ''}
                   </span>
                 </div>
@@ -344,7 +348,7 @@ export default function UserSettings({ onClose }: UserSettingsProps) {
             <div style={{ animation: 'fadeIn 0.2s ease-out', maxWidth: '550px' }}>
               <div className="glass-card" style={{ background: '#ffffff', border: '1px solid #e5e7eb', boxShadow: 'none' }}>
                 <h3 style={{ fontSize: '1.1rem', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)' }}>
-                  <Cpu size={18} style={{ color: '#00a2ff' }} /> Custom LLM API Keys
+                  <Cpu size={18} style={{ color: '#000000' }} /> Custom LLM API Keys
                 </h3>
 
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginBottom: '1.25rem', lineHeight: '1.5' }}>
@@ -401,7 +405,7 @@ export default function UserSettings({ onClose }: UserSettingsProps) {
                     <button 
                       type="submit" 
                       className="btn-primary" 
-                      style={{ flex: 1, padding: '0.6rem', fontSize: '0.85rem', borderRadius: '8px', background: 'linear-gradient(135deg, #00a2ff 0%, #1d4ed8 100%)' }}
+                      style={{ flex: 1, padding: '0.6rem', fontSize: '0.85rem', borderRadius: '8px', background: '#000000' }}
                       disabled={savingLlmKeys}
                     >
                       {savingLlmKeys ? 'Saving...' : 'Save API Keys'}
@@ -437,7 +441,7 @@ export default function UserSettings({ onClose }: UserSettingsProps) {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                       <div>
                         <span style={{ fontSize: '0.7rem', color: '#6b7280', textTransform: 'uppercase', fontWeight: 700 }}>Current Plan Tier</span>
-                        <h4 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#00a2ff', textTransform: 'capitalize', marginTop: '0.1rem' }}>
+                        <h4 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#000000', textTransform: 'capitalize', marginTop: '0.1rem' }}>
                           {user?.tier || 'starter'} Plan
                         </h4>
                       </div>
@@ -461,38 +465,51 @@ export default function UserSettings({ onClose }: UserSettingsProps) {
                         style={{ 
                           padding: '0.85rem 1rem', 
                           borderRadius: '12px', 
-                          border: isActive ? `1.5px solid ${pkg.color}` : '1.5px solid #e5e7eb', 
+                          border: isActive ? '2px solid #ffffff' : '1px solid rgba(255, 255, 255, 0.15)', 
                           display: 'flex', 
                           flexDirection: 'column',
                           justifyContent: 'space-between',
-                          background: isActive ? `${pkg.color}05` : '#ffffff',
-                          position: 'relative'
+                          background: 'linear-gradient(135deg, rgba(20, 20, 20, 0.95) 0%, rgba(5, 5, 5, 0.99) 100%)',
+                          boxShadow: isActive ? '0 8px 24px rgba(0, 0, 0, 0.35)' : 'none',
+                          position: 'relative',
+                          textAlign: 'left'
                         }}
                       >
                         {pkg.popular && (
-                          <span className="tag tag-info" style={{ position: 'absolute', top: '8px', right: '10px', fontSize: '0.6rem' }}>
+                          <span className="tag" style={{ 
+                            position: 'absolute', 
+                            top: '8px', 
+                            right: '10px', 
+                            fontSize: '0.6rem',
+                            padding: '0.15rem 0.4rem',
+                            background: '#ffffff',
+                            color: '#000000',
+                            borderRadius: '9999px',
+                            fontWeight: 700,
+                            border: 'none'
+                          }}>
                             Best Value
                           </span>
                         )}
                         
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
                           <div>
-                            <h4 style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-primary)' }}>{pkg.name}</h4>
-                            <div style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.1rem' }}>
+                            <h4 style={{ fontSize: '0.9rem', fontWeight: 700, color: '#ffffff', margin: 0 }}>{pkg.name}</h4>
+                            <div style={{ fontSize: '0.75rem', color: '#cbd5e1', marginTop: '0.1rem' }}>
                               {pkg.credits.toLocaleString()} standard credits
                             </div>
                           </div>
                           <div style={{ textAlign: 'right' }}>
-                            <span style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-primary)' }}>US${pkg.price}</span>
-                            <span style={{ fontSize: '0.65rem', color: '#6b7280', display: 'block' }}>USD / one-time</span>
+                            <span style={{ fontSize: '1.1rem', fontWeight: 800, color: '#ffffff' }}>US${pkg.price}</span>
+                            <span style={{ fontSize: '0.65rem', color: '#cbd5e1', display: 'block' }}>USD / one-time</span>
                           </div>
                         </div>
 
-                        <div style={{ fontSize: '0.75rem', color: '#4b5563', display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.75rem', borderTop: '1px solid #e5e7eb', paddingTop: '0.5rem' }}>
+                        <div style={{ fontSize: '0.75rem', color: '#cbd5e1', display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.75rem', borderTop: '1px solid rgba(255, 255, 255, 0.12)', paddingTop: '0.5rem' }}>
                           {pkg.features.slice(1).map((feat, fidx) => (
                             <div key={fidx} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                              <Check size={11} style={{ color: pkg.color }} />
-                              <span style={{ fontSize: '0.7rem' }}>{feat}</span>
+                              <span style={{ color: '#ffffff', fontWeight: 'bold', fontSize: '0.65rem' }}>✓</span>
+                              <span style={{ fontSize: '0.7rem', color: '#cbd5e1' }}>{feat}</span>
                             </div>
                           ))}
                         </div>
@@ -502,13 +519,15 @@ export default function UserSettings({ onClose }: UserSettingsProps) {
                           className="btn-primary" 
                           style={{ 
                             width: '100%', 
-                            background: isActive ? 'transparent' : 'var(--gradient-primary)', 
-                            border: isActive ? `1px solid ${pkg.color}` : 'none', 
-                            color: isActive ? pkg.color : '#ffffff', 
-                            padding: '0.4rem', 
+                            background: isActive ? 'transparent' : '#ffffff', 
+                            border: isActive ? '1px solid rgba(255, 255, 255, 0.4)' : 'none', 
+                            color: isActive ? '#ffffff' : '#000000', 
+                            padding: '0.45rem', 
                             fontSize: '0.75rem', 
-                            borderRadius: '6px', 
-                            cursor: isActive ? 'default' : 'pointer'
+                            borderRadius: '8px', 
+                            cursor: isActive ? 'default' : 'pointer',
+                            fontWeight: 700,
+                            boxShadow: isActive ? 'none' : '0 4px 12px rgba(255, 255, 255, 0.1)'
                           }}
                           disabled={isActive || purchasingPlan !== null}
                           onClick={() => handleUpgradePlan(pkg.id, pkg.credits)}
@@ -523,7 +542,17 @@ export default function UserSettings({ onClose }: UserSettingsProps) {
               </div>
             </div>
           )}
+          {activeTab === 'history' && (
+            <div style={{ animation: 'fadeIn 0.2s ease-out' }}>
+              <History hideHeader={true} />
+            </div>
+          )}
 
+          {activeTab === 'transactions' && (
+            <div style={{ animation: 'fadeIn 0.2s ease-out' }}>
+              <CreditTransactions hideHeader={true} />
+            </div>
+          )}
         </div>
 
       </div>

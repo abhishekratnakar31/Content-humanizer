@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { NavLink, Outlet, Link } from 'react-router-dom';
 import { useAppStore } from '../store/useAppStore';
-import { Sparkles, Shield, Key, Database, ChevronLeft, ChevronRight, History, CreditCard } from 'lucide-react';
+import { Sparkles, Shield, Key, Database, ChevronLeft, ChevronRight } from 'lucide-react';
 import UserSettings from './UserSettings';
 
 export default function UserLayout() {
@@ -51,7 +51,7 @@ export default function UserLayout() {
                 fontFamily: 'var(--font-sans)', 
                 fontWeight: 800, 
                 fontSize: '1.75rem', 
-                color: '#1d4ed8',
+                color: '#000000',
                 letterSpacing: '-0.03em',
                 lineHeight: 1
               }}>c</span>
@@ -117,29 +117,7 @@ export default function UserLayout() {
               </NavLink>
             </li>
 
-            <li>
-              <NavLink 
-                to="/dashboard/history"
-                className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-                style={{ textDecoration: 'none' }}
-                title={isCollapsed ? "History" : undefined}
-              >
-                <History size={18} />
-                {!isCollapsed && <span>History</span>}
-              </NavLink>
-            </li>
 
-            <li>
-              <NavLink 
-                to="/dashboard/transactions"
-                className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-                style={{ textDecoration: 'none' }}
-                title={isCollapsed ? "Transactions" : undefined}
-              >
-                <CreditCard size={18} />
-                {!isCollapsed && <span>Transactions</span>}
-              </NavLink>
-            </li>
 
 
             {user?.role === 'admin' && (
@@ -152,13 +130,13 @@ export default function UserLayout() {
                     justifyContent: 'center',
                     gap: isCollapsed ? '0' : '0.75rem',
                     padding: isCollapsed ? '0.85rem' : '0.85rem 1rem',
-                    color: '#8b5cf6',
+                    color: '#000000',
                     borderRadius: '8px',
                     fontWeight: 700,
                     textDecoration: 'none',
-                    background: 'rgba(139, 92, 246, 0.1)',
-                    border: '1px solid rgba(139, 92, 246, 0.2)',
-                    boxShadow: '0 4px 12px rgba(139, 92, 246, 0.05)',
+                    background: 'rgba(0, 0, 0, 0.05)',
+                    border: '1px solid rgba(0, 0, 0, 0.12)',
+                    boxShadow: 'none',
                     transition: 'all 0.2s ease-in-out'
                   }}
                   className="admin-switch-btn"
@@ -195,7 +173,7 @@ export default function UserLayout() {
                 width: '28px', 
                 height: '28px', 
                 borderRadius: '50%', 
-                background: '#3b82f6', 
+                background: '#000000', 
                 color: '#fff', 
                 display: 'flex', 
                 alignItems: 'center', 
@@ -250,11 +228,14 @@ export default function UserLayout() {
             borderRadius: '24px',
             boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
             width: '100%',
-            maxWidth: '900px',
+            maxWidth: '1000px',
+            height: '700px',
+            maxHeight: '85vh',
             padding: '2.5rem 2rem 2rem 2rem',
             position: 'relative',
-            maxHeight: '90vh',
-            overflowY: 'auto'
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden'
           }}
           onClick={(e) => e.stopPropagation()}
           >

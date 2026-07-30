@@ -15,7 +15,6 @@ import AdminLayout from './components/AdminLayout';
 import AdminOverview from './components/AdminOverview';
 import AdminTasks from './components/AdminTasks';
 import AdminCosts from './components/AdminCosts';
-import AdminModels from './components/AdminModels';
 import AdminUsers from './components/AdminUsers';
 import Toast from './components/Toast';
 export default function App() {
@@ -78,7 +77,6 @@ export default function App() {
             <Route path="overview" element={<AdminOverview />} />
             <Route path="tasks" element={<AdminTasks />} />
             <Route path="costs" element={<AdminCosts />} />
-            <Route path="models" element={<AdminModels />} />
             <Route path="users" element={<AdminUsers />} />
           </Route>
         </Route>

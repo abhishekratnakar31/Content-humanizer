@@ -106,7 +106,7 @@ export default function Auth() {
       }}>
         <div style={{
           flex: 1,
-          background: '#2563eb',
+          background: 'linear-gradient(135deg, #070a13 0%, #0f172a 100%)',
           borderRadius: '24px',
           padding: '3rem',
           display: 'flex',
@@ -115,7 +115,8 @@ export default function Auth() {
           color: '#ffffff',
           position: 'relative',
           overflow: 'hidden',
-          boxShadow: '0 20px 25px -5px rgba(37, 99, 235, 0.2), 0 8px 10px -6px rgba(37, 99, 235, 0.2)'
+          boxShadow: '0 20px 40px -10px rgba(0,0,0,0.4)',
+          border: '1px solid rgba(255, 255, 255, 0.08)'
         }}>
           {/* Subtle background decoration circles */}
           <div style={{
@@ -395,7 +396,7 @@ export default function Auth() {
                 width: '100%', 
                 marginTop: '1rem', 
                 height: '46px',
-                background: '#2563eb',
+                background: '#000000',
                 color: '#ffffff',
                 border: 'none',
                 borderRadius: '8px',
@@ -407,10 +408,10 @@ export default function Auth() {
                 justifyContent: 'center',
                 gap: '0.5rem',
                 transition: 'background 0.2s',
-                boxShadow: '0 4px 6px -1px rgba(37, 99, 235, 0.2)'
+                boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
               }}
-              onMouseOver={(e) => e.currentTarget.style.background = '#1d4ed8'}
-              onMouseOut={(e) => e.currentTarget.style.background = '#2563eb'}
+              onMouseOver={(e) => e.currentTarget.style.background = '#222222'}
+              onMouseOut={(e) => e.currentTarget.style.background = '#000000'}
               disabled={loading}
             >
               {loading ? (
@@ -472,10 +473,11 @@ export default function Auth() {
               style={{
                 background: 'none',
                 border: 'none',
-                color: '#2563eb',
+                color: '#000000',
                 fontWeight: 700,
                 cursor: 'pointer',
-                fontSize: '0.9rem'
+                fontSize: '0.9rem',
+                textDecoration: 'underline'
               }}
             >
               {isSignUp ? 'Sign In Now.' : 'Register Now.'}

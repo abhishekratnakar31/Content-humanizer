@@ -121,7 +121,7 @@
   --text-secondary: #6b7280;
   --text-muted: #9ca3af;
   
-  --color-primary: #1d4ed8; /* Vibrant Blue */
+  --color-primary: #000000; /* Minimalist Black */
   --color-secondary: #a855f7; /* Purple */
   --color-accent: #ec4899; /* Pink */
   
@@ -384,20 +384,20 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: center;
   gap: 0.75rem;
   padding: 0.85rem 1rem;
-  color: #1d4ed8;
+  color: #000000;
   border-radius: 8px;
   font-weight: 700;
   text-decoration: none;
-  background: rgba(29, 78, 216, 0.08);
-  border: 1px solid rgba(29, 78, 216, 0.15);
-  box-shadow: 0 4px 12px rgba(29, 78, 216, 0.05);
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: none;
   transition: all 0.2s ease-in-out;
   width: 100%;
 }
 .user-switch-btn:hover {
-  background: #1d4ed8 !important;
+  background: #000000 !important;
   color: #ffffff !important;
-  box-shadow: 0 4px 16px rgba(29, 78, 216, 0.3) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
   transform: translateY(-1px);
 }
 

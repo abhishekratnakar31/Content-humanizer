@@ -37,7 +37,7 @@ const formatDateTime = (createdAt: any) => {
   }
 };
 
-export default function History() {
+export default function History({ hideHeader = false }: { hideHeader?: boolean }) {
   const { userHistory, fetchUserHistory, resumeTask } = useAppStore();
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
@@ -66,29 +66,31 @@ export default function History() {
   return (
     <div style={{ animation: 'fadeIn 0.4s ease-out' }}>
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <div>
-          <h2 style={{ fontSize: '2rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)' }}>
-            My History <Database style={{ color: 'var(--color-secondary)' }} />
-          </h2>
-          <p style={{ color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
-            Review your past humanization tasks and their outputs.
-          </p>
-        </div>
+      {!hideHeader && (
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+          <div>
+            <h2 style={{ fontSize: '2rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)' }}>
+              My History <Database style={{ color: 'var(--color-secondary)' }} />
+            </h2>
+            <p style={{ color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
+              Review your past humanization tasks and their outputs.
+            </p>
+          </div>
 
-        <button 
-          className="btn-secondary" 
-          style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '0.5rem',
-            cursor: 'pointer'
-          }} 
-          onClick={handleRefresh}
-        >
-          <RefreshCw size={16} /> Sync Logs
-        </button>
-      </div>
+          <button 
+            className="btn-secondary" 
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '0.5rem',
+              cursor: 'pointer'
+            }} 
+            onClick={handleRefresh}
+          >
+            <RefreshCw size={16} /> Sync Logs
+          </button>
+        </div>
+      )}
 
       {/* Main Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem' }}>
@@ -125,14 +127,11 @@ export default function History() {
               <table className="admin-table">
                 <thead>
                   <tr style={{ borderBottomColor: 'var(--card-border)' }}>
-                    <th style={{ color: 'var(--text-secondary)' }}>Type</th>
-                    <th style={{ color: 'var(--text-secondary)' }}>Source</th>
                     <th style={{ color: 'var(--text-secondary)' }}>Executed At</th>
-                    <th style={{ color: 'var(--text-secondary)' }}>Status</th>
                     <th style={{ color: 'var(--text-secondary)' }}>Words</th>
-                    <th style={{ color: 'var(--text-secondary)' }}>Input Text</th>
-                    <th style={{ color: 'var(--text-secondary)' }}>Output Text</th>
-                    <th style={{ color: 'var(--text-secondary)' }}>Credits Used</th>
+                    <th style={{ color: 'var(--text-secondary)' }}>Status</th>
+                    <th style={{ color: 'var(--text-secondary)' }}>Text Preview</th>
+                    <th style={{ color: 'var(--text-secondary)' }}>Credits</th>
                     <th style={{ color: 'var(--text-secondary)' }}>Action</th>
                   </tr>
                 </thead>
@@ -144,28 +143,20 @@ export default function History() {
                       onMouseOver={(e) => e.currentTarget.style.background = 'rgba(0,0,0,0.01)'}
                       onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
                     >
-                      <td>
-                        <span style={{ fontSize: '0.85rem', color: 'var(--text-primary)', textTransform: 'capitalize' }}>
-                          {job.type}
-                        </span>
-                      </td>
-                      <td>
-                        <span className={`tag ${job.apiKeyId || job.executionSource === 'API Key' ? 'tag-info' : 'tag-success'}`} style={{ fontSize: '0.75rem' }}>
-                          {job.executionSource || (job.apiKeyId ? 'API Key' : 'Platform')}
-                        </span>
-                      </td>
                       <td style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', whiteSpace: 'nowrap' }}>
                         {formatDateTime(job.createdAt)}
                       </td>
+                      <td style={{ color: 'var(--text-primary)', fontSize: '0.8rem', whiteSpace: 'nowrap' }}>
+                        {job.wordsIn} words
+                      </td>
                       <td>
-                        <span className={`tag ${job.status === 'completed' ? 'tag-success' : job.status === 'processing' ? 'tag-info' : 'tag-danger'}`}>
+                        <span className={`tag ${job.status === 'completed' ? 'tag-success' : job.status === 'processing' ? 'tag-info' : 'tag-danger'}`} style={{ fontSize: '0.7rem' }}>
                           {job.status}
                         </span>
                       </td>
-                      <td style={{ color: 'var(--text-primary)' }}>{job.wordsIn} → {job.wordsOut || '-'}</td>
                       <td>
                         <div className="tooltip-container history-tooltip-container">
-                          <div style={{ maxWidth: '120px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: 'var(--text-primary)' }}>
+                          <div style={{ maxWidth: '140px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: 'var(--text-primary)', fontSize: '0.8rem' }}>
                             {job.inputText || '-'}
                           </div>
                           {job.inputText && (
@@ -175,19 +166,9 @@ export default function History() {
                           )}
                         </div>
                       </td>
-                      <td>
-                        <div className="tooltip-container history-tooltip-container">
-                          <div style={{ maxWidth: '120px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: 'var(--text-primary)' }}>
-                            {job.outputText || '-'}
-                          </div>
-                          {job.outputText && (
-                            <span className="tooltip-text">
-                              {job.outputText}
-                            </span>
-                          )}
-                        </div>
+                      <td style={{ color: 'var(--text-primary)', fontSize: '0.8rem' }}>
+                        {job.creditsUsed !== undefined ? job.creditsUsed.toLocaleString() : '-'}
                       </td>
-                      <td style={{ color: 'var(--text-primary)' }}>{job.creditsUsed !== undefined ? job.creditsUsed : '-'}</td>
                       <td>
                         <button
                           onClick={() => handleResume(job)}
@@ -195,7 +176,7 @@ export default function History() {
                           style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.25rem' }}
                           title="Resume Task"
                         >
-                          <Play size={14} /> Resume
+                          <Play size={12} /> Resume
                         </button>
                       </td>
                     </tr>

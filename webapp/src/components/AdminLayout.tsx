@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { NavLink, Outlet, Link } from 'react-router-dom';
 import { useAppStore } from '../store/useAppStore';
-import { Database, Cpu, ArrowLeft, Activity, Sliders, Users, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Database, Cpu, ArrowLeft, Activity, Users, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function AdminLayout() {
   const { user } = useAppStore();
@@ -121,17 +121,7 @@ export default function AdminLayout() {
               </NavLink>
             </li>
 
-            <li>
-              <NavLink 
-                to="/admin/models"
-                className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-                style={{ textDecoration: 'none' }}
-                title={isCollapsed ? "Model Config" : undefined}
-              >
-                <Sliders size={18} />
-                {!isCollapsed && <span>Model Config</span>}
-              </NavLink>
-            </li>
+
 
             <li>
               <NavLink 
@@ -156,13 +146,13 @@ export default function AdminLayout() {
                   justifyContent: 'center',
                   gap: isCollapsed ? '0' : '0.75rem',
                   padding: isCollapsed ? '0.85rem' : '0.85rem 1rem',
-                  color: '#1d4ed8',
+                  color: '#000000',
                   borderRadius: '8px',
                   fontWeight: 700,
                   textDecoration: 'none',
-                  background: 'rgba(29, 78, 216, 0.08)',
-                  border: '1px solid rgba(29, 78, 216, 0.15)',
-                  boxShadow: '0 4px 12px rgba(29, 78, 216, 0.05)',
+                  background: '#f1f5f9',
+                  border: '1px solid #e2e8f0',
+                  boxShadow: 'none',
                   transition: 'all 0.2s ease-in-out',
                   width: '100%'
                 }}
